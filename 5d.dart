@@ -3,7 +3,7 @@ void main() {
   final fuel = Fuel(fulePrice: 2.8);
   final gas = Gas(gasPrice: 2.2);
 
-  final Vehicle hice = Vehicle();
+  final Vehicle hice = Vehicle("Tot");
   print(hice.vehicleMileage(fuel, 40));
   hice.isGood(fuel);
 
@@ -51,6 +51,9 @@ class Gas implements IEnergySource {
 // class
 
 class Vehicle {
+  final String brandName;
+  Vehicle(this.brandName);
+
   double vehicleMileage(IEnergySource energySource, int l) {
     return energySource.mileage(l);
   }
