@@ -1,39 +1,61 @@
+// D: The Dependency Inversion Principle (DIP)
 void main() {
-  final ob1 = Singleton();
-  print('---');
-  final ob2 = Singleton();
-  print('---');
-  final ob3 = Singleton();
-  print('---');
+  final fuel = Fuel(fulePrice: 2.8);
+  final gas = Gas(gasPrice: 2.2);
 
-  print(ob1 == ob2);
-  print('---');
-  print(ob2 == ob3);
+  final Vehicle hice = Vehicle();
+  print(hice.vehicleMileage(fuel, 40));
+  hice.isGood(fuel);
+
+  print(hice.vehicleMileage(gas, 30));
+  hice.isGood(gas);
 }
 
-// Singleton
+abstract class IEnergySource {
+  double mileage(int liter);
+  void feedBack();
+}
 
-class Singleton {
-  static final _instance = Singleton._();
+// DI
 
-  Singleton._() {
-    // calls once while first object created
-    print("#2nd call");
+class Fuel implements IEnergySource {
+  final double fulePrice;
+  Fuel({required this.fulePrice});
+
+  @override
+  double mileage(int liter) {
+    return liter * fulePrice;
   }
 
-  factory Singleton() {
-    print("#1st call");
-    return _instance;
+  @override
+  void feedBack() {
+    print("Good for engine");
   }
 }
 
-/*
-  #1st call
-  #2nd call
-  -
-  #1st call
-  -
-  #1st call
-  -
-  true
-*/
+class Gas implements IEnergySource {
+  final double gasPrice;
+  Gas({required this.gasPrice});
+
+  @override
+  double mileage(int liter) {
+    return liter * 25;
+  }
+
+  @override
+  void feedBack() {
+    print("Not good for engine");
+  }
+}
+
+// class
+
+class Vehicle {
+  double vehicleMileage(IEnergySource energySource, int l) {
+    return energySource.mileage(l);
+  }
+
+  void isGood(IEnergySource energySource) {
+    energySource.feedBack();
+  }
+}

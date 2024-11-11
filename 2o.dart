@@ -1,63 +1,70 @@
+// O: The Open-Closed Principle (OCP)
 void main() {
-  final Car jeep = Car("Hum", false);
-  final Car hice = Car("Tot", true);
+  const double _fuelPrice = 9.24;
 
-  final Bike eightyCC = Bike("Hon", 30.5);
-
-  jeep.showTitle();
-  print(jeep.getDetails());
+  final Car jeep = Car("Tot");
+  print(jeep.brandName);
+  jeep.fuelCostPerKm(_fuelPrice);
 
   print('---');
 
-  hice.showTitle();
-  print(hice.getDetails());
+  final Bike eightyCC = Bike("Hon");
+  print(eightyCC.brandName);
+  eightyCC.fuelCostPerKm(_fuelPrice);
 
   print('---');
 
-  eightyCC.showTitle();
-  print(eightyCC.getDetails());
+  final ElectricCar electricCar = ElectricCar("Tes");
+  print(electricCar.brandName);
+  electricCar.fuelCostPerKm(_fuelPrice);
 }
 
 // Abstract
 
 abstract class Vehicle {
   final String brand;
-  final int wheel;
-  Vehicle(this.brand, this.wheel);
+  int fuelPerKm;
 
-  void showTitle() {
-    print("Brand: $brand\tWheel: $wheel");
+  Vehicle({required this.brand, required this.fuelPerKm});
+
+  void fuelCostPerKm(double fuelPrice) {
+    print("Fule Cost: ${fuelPerKm * fuelPrice}");
   }
-
-  String getDetails();
 }
 
 // Class
 
 class Car extends Vehicle {
   final String brandName;
-  final bool ac;
-  Car(
-    this.brandName,
-    this.ac,
-  ) : super(brandName, 4);
 
-  @override
-  String getDetails() {
-    return "has ac: $ac";
-  }
+  Car(this.brandName) : super(brand: brandName, fuelPerKm: 20);
 }
 
 class Bike extends Vehicle {
   final String brandName;
-  final double handelRotate;
-  Bike(
-    this.brandName,
-    this.handelRotate,
-  ) : super(brandName, 2);
 
-  @override
-  String getDetails() {
-    return "rotation degree: $handelRotate";
-  }
+  Bike(this.brandName) : super(brand: brandName, fuelPerKm: 40);
 }
+
+// Blocking- will sort in (L)
+class ElectricCar extends Vehicle {
+  final String brandName;
+
+  ElectricCar(this.brandName)
+      : super(
+          brand: brandName,
+          fuelPerKm: throw ("doesn't run on fule"),
+        );
+}
+
+
+/*
+  Tot
+  Fule Cost: 184.8
+  ---
+  Hon
+  Fule Cost: 369.6
+  ---
+  Unhandled exception:
+  doesn't run on fule
+*/
